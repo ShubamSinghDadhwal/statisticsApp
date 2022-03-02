@@ -24,35 +24,21 @@ margin: 0 auto;
 border-color: #4BC0C0;
 `;
 
-export default function Metadata({startDate, endDate}) {
-  const [metadata, setSummary] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      fetch('https://qorner-mock-server.herokuapp.com/stats?' + new URLSearchParams({
-        startDate,
-        endDate,
-      }))
-      .then((response) => response.json())
-      .then(json => {
-        setSummary(json.metadata);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });  
-    };
-    fetchData();
-  }, [startDate, endDate]);
-
+export default function Metadata({
+  startDate,
+  endDate,
+  loading,
+  setLoading,
+  json,
+}) {
+  const metadata = json?.metadata;
   return (
     <div>
       <div className='navbar'>
         <span className='app-title'>Youtube Stats</span> <br/>
-        <img src={logo} height={100} width={100}></img>
+        <div>
+          <img src={logo} height={100} width={100}></img>
+        </div>
       </div>
       
       {!loading ?

@@ -11,7 +11,6 @@ import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/react';
-import { useErrorHandler } from 'react-error-boundary'
 
 ChartJS.register(
   LineElement,
@@ -26,31 +25,16 @@ margin: 0 auto;
 border-color: #4BC0C0;
 `;
 
-export default function Summary({startDate, endDate, setStartDate, setEndDate}) {
-  const [summary, setSummary] = useState({});
-  const [loading, setLoading] = useState(true);
-  const handleError = useErrorHandler();
+export default function Summary({
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+  loading,
+  json,
+}) {
+  const summary = json?.summary;
 
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      fetch('https://qorner-mock-server.herokuapp.com/stats?' + new URLSearchParams({
-        startDate,
-        endDate,
-      }))
-        .then((response) => response.json())
-        .then(json => {
-          setSummary(json.summary);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-          handleError(error);
-        });  
-    };
-    fetchData();
-  }, [startDate, endDate]);
   return (
     <div className='summary-component'>
       <div className='main-div summary-div'>

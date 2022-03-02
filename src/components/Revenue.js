@@ -24,30 +24,15 @@ margin: 0 auto;
 border-color: #4BC0C0;
 `;
 
-export default function Revenue({startDate, endDate}) {
+export default function Revenue({
+  startDate,
+  endDate,
+  loading,
+  setLoading,
+  json,
+}) {
   
-  const [revenue, setRevenue] = useState({});
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      fetch('https://qorner-mock-server.herokuapp.com/stats?' + new URLSearchParams({
-        startDate,
-        endDate,
-      }))
-        .then((response) => response.json())
-        .then(json => {
-          setRevenue(json.revenueDetails);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
-    };
-    fetchData();
-  }, [startDate, endDate]);
+  const revenue = json?.revenueDetails;
 
   const data = {
     labels: revenue?.estimatedRevenueTrend?.data?.map(revenueObj => moment(revenueObj.date).format("MMM D")),
@@ -79,7 +64,7 @@ export default function Revenue({startDate, endDate}) {
           <span className='secondary-title'>Estimated Revenue</span> <br/>
           <span className='secondary-value'>{ revenue?.estimatedRevenueTrend?.value } Lac</span> <br/>
           <span className='secondary-percentage'>
-            { revenue?.estimatedRevenueTrend?.change.value > 0 ? '+' : '-'}
+            { revenue?.estimatedRevenueTrend?.change.value > 0 ? '+' : ''}
             { revenue?.estimatedRevenueTrend?.change?.percentage }%
           </span> <br/> 
           <hr className='secondary-underline' />

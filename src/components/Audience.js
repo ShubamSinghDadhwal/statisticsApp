@@ -24,30 +24,15 @@ margin: 0 auto;
 border-color: #4BC0C0;
 `;
 
-export default function Audience({startDate, endDate}) {
+export default function Audience({
+  startDate,
+  endDate,
+  loading,
+  setLoading,
+  json,
+}) {
   
-  const [audience, setAudience] = useState({});
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      fetch('https://qorner-mock-server.herokuapp.com/stats?' + new URLSearchParams({
-        startDate,
-        endDate,
-      }))
-        .then((response) => response.json())
-        .then(json => {
-          setAudience(json.audienceDetails);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
-    };
-    fetchData();
-  }, [startDate, endDate]);
+  const audience = json?.audienceDetails;
 
   const data = {
     labels: audience?.viewsSubscriberVsNonSubscribersTrend?.data?.map(revenueObj => moment(revenueObj.date).format("MMM D")),

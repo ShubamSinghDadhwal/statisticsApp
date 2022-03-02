@@ -24,31 +24,14 @@ margin: 0 auto;
 border-color: #4BC0C0;
 `;
 
-export default function ReachAndEngagement({startDate, endDate}) {
-  
-  const [reachAndEngagement, setReachAndEngagement] = useState({});
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      fetch('https://qorner-mock-server.herokuapp.com/stats?' + new URLSearchParams({
-        startDate,
-        endDate,
-      }))
-        .then((response) => response.json())
-        .then(json => {
-          setReachAndEngagement(json.reachAndEngagementDetails);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
-    };
-    fetchData();
-  }, [startDate, endDate]);
-  
+export default function ReachAndEngagement({
+  startDate,
+  endDate,
+  loading,
+  setLoading,
+  json,
+}) {
+  const reachAndEngagement = json?.reachAndEngagementDetails;
   const data = {
     labels: reachAndEngagement?.viewsTrend?.data?.map(reachAndEngagementObj => moment(reachAndEngagementObj.date).format("MMM D")),
     datasets: [{
@@ -79,7 +62,7 @@ export default function ReachAndEngagement({startDate, endDate}) {
           <span className='secondary-title'>Views</span> <br/>
           <span className='secondary-value'>{ reachAndEngagement?.viewsTrend?.value/10 ?? reachAndEngagement?.viewsTrend?.value } M</span> <br/>
           <span className='secondary-percentage'>
-            { reachAndEngagement?.viewsTrend?.change.value > 0 ? '+' : '-'}
+            { reachAndEngagement?.viewsTrend?.change.value > 0 ? '+' : ''}
             { reachAndEngagement?.viewsTrend?.change?.percentage }%
           </span> <br/> 
           <hr className='secondary-underline' />
